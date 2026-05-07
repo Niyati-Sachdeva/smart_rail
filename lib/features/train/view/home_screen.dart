@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'train_status_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -109,9 +110,17 @@ class HomeScreen extends StatelessWidget {
                     ),
             
                     onPressed: () {
-            
-                    },
-            
+
+  Navigator.push(
+
+    context,
+
+    MaterialPageRoute(
+
+      builder: (context) => const TrainStatusScreen(),
+    ),
+  );
+},
                     child: const Text(
                       "Track Live",
             
