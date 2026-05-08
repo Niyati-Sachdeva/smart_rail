@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'route_timeline_screen.dart';
 class TrainStatusScreen extends StatelessWidget {
 
   const TrainStatusScreen({super.key});
@@ -12,6 +12,8 @@ class TrainStatusScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF0B1020),
 
       body: SafeArea(
+child:SingleChildScrollView(
+
 
         child: Padding(
 
@@ -186,11 +188,84 @@ stationInfoCard(
   title: "Estimated Arrival",
   value: "7:40 PM",
 ),
+const SizedBox(height :20),
+Container(
+  width: double.infinity,
+  padding: const EdgeInsets.all(20),
+  decoration: BoxDecoration(
+    color: const Color(0xFF1A2238),
+    borderRadius: BorderRadius.circular(20),
+  ),
+  child:Row(
+    children: [
+      const Icon(Icons.cloud,
+      color: Colors.orange,
+      size:40,),
+      const SizedBox(height:20),
+      Column(crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("destination weather",
+        style: TextStyle(
+          color:Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+
+        ),),
+        const SizedBox(height:5),
+        Text("Prayagraj",
+        style: TextStyle(
+          color:Colors.white70
+        ),)
+      ],)
+    ],
+  )
+),const SizedBox(height:30),
+
+SizedBox(
+
+  width: double.infinity,
+  height: 58,
+
+  child: ElevatedButton(
+
+    style: ElevatedButton.styleFrom(
+
+      backgroundColor: Colors.orange,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
+    ),
+
+    onPressed: () {
+
+  Navigator.push(
+
+    context,
+
+    MaterialPageRoute(
+
+      builder: (context) => const RouteTimelineScreen(),
+    ),
+  );
+},
+
+    child: const Text(
+      "View Full Route",
+
+      style: TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+),
             ],
           ),
         ),
       ),
-    );}
+  )  );}
       Widget stationInfoCard({
   required String title,
   required String value,
