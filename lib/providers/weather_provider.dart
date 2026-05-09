@@ -8,18 +8,22 @@ class WeatherProvider extends ChangeNotifier {
   Map<String, dynamic>? weatherData;
 
   bool isLoading = false;
-    // ADD HERE
+  String?errorMessage;
+    
   Future<void> getWeather(String city) async {
-    print("provider called");
+    try{
+
+    
 
     isLoading = true;
-
+errorMessage=null;
     notifyListeners();
 
     weatherData = await apiServices.fetchWeather(city);
+    }catch(e){
 
-    isLoading = false;
-
+    errorMessage="failed to load weather";    isLoading = false;
+    }isLoading=false;
     notifyListeners();
   }
 }
