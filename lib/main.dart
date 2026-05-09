@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'providers/weather_provider.dart';
 import 'features/train/view/splash_screen.dart';
 
 void main() {
   runApp(
-    const MyApp(),
+    ChangeNotifierProvider(
+      create:(context) => WeatherProvider(),
+      child: const MyApp()),
   );
 }
 

@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
 import 'route_timeline_screen.dart';
-class TrainStatusScreen extends StatelessWidget {
+import 'package:smart_railway_app/services/api_service.dart';
+import 'package:smart_railway_app/providers/weather_provider.dart';
+import 'package:provider/provider.dart';
+class TrainStatusScreen extends StatefulWidget {
 
   const TrainStatusScreen({super.key});
 
   @override
+  
+    State<TrainStatusScreen> createState() =>
+      _TrainStatusScreenState();
+}class _TrainStatusScreenState
+    extends State<TrainStatusScreen> {
+      @override
+      void initState(){
+        super.initState();
+        Future.microtask(() {
+
+  Provider.of<WeatherProvider>(
+    context,
+    listen: false,
+  ).getWeather("Delhi");
+});
+      }
+@override
   Widget build(BuildContext context) {
-    
+    final weatherProvider =
+    Provider.of<WeatherProvider>(context);
+
+
+final weatherData =
+    weatherProvider.weatherData;
     return Scaffold(
 
       backgroundColor: const Color(0xFF0B1020),
@@ -202,21 +227,54 @@ Container(
       color: Colors.orange,
       size:40,),
       const SizedBox(height:20),
-      Column(crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text("destination weather",
-        style: TextStyle(
-          color:Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+     Column(
 
-        ),),
-        const SizedBox(height:5),
-        Text("Prayagraj",
-        style: TextStyle(
-          color:Colors.white70
-        ),)
-      ],)
+  crossAxisAlignment: CrossAxisAlignment.start,
+
+  children: [
+
+    Text(
+
+      weatherData == null
+          ? "Loading..."
+          : "${weatherData["main"]["temp"]}°C",
+
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+
+    const SizedBox(height: 6),
+
+    Text(
+
+      weatherData == null
+          ? ""
+          : weatherData["weather"][0]["main"],
+
+      style: const TextStyle(
+        color: Colors.white70,
+        fontSize: 16,
+      ),
+    ),
+
+    const SizedBox(height: 6),
+
+    Text(
+
+      weatherData == null
+          ? ""
+          : weatherData["name"],
+
+      style: const TextStyle(
+        color: Colors.white54,
+        fontSize: 14,
+      ),
+    ),
+  ],
+)
     ],
   )
 ),const SizedBox(height:30),
