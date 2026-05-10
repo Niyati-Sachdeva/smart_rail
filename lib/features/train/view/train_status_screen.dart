@@ -3,6 +3,7 @@ import 'route_timeline_screen.dart';
 import 'package:smart_railway_app/services/api_service.dart';
 import 'package:smart_railway_app/providers/weather_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_railway_app/services/train_api_service.dart';
 class TrainStatusScreen extends StatefulWidget {
 
   const TrainStatusScreen({super.key});
@@ -21,7 +22,8 @@ class TrainStatusScreen extends StatefulWidget {
   Provider.of<WeatherProvider>(
     context,
     listen: false,
-  ).getWeather("Delhi");
+  ).getWeather("Saharanpur");
+  TrainApiService().fetchTrainStatus("14522");
 });
       }
 @override
@@ -32,6 +34,10 @@ class TrainStatusScreen extends StatefulWidget {
 
 final weatherData =
     weatherProvider.weatherData;
+    
+    final errorMessage=weatherProvider.errorMessage;
+    final weatherCondition =
+    weatherData?["weather"][0]["main"];
     return Scaffold(
 
       backgroundColor: const Color(0xFF0B1020),
@@ -223,56 +229,89 @@ Container(
   ),
   child:Row(
     children: [
-      const Icon(Icons.cloud,
+      Icon(
+         weatherCondition == "Rain"
+      ? Icons.water_drop
+
+      : weatherCondition == "Clouds"
+          ? Icons.cloud
+
+          : weatherCondition == "Clear"
+              ? Icons.wb_sunny
+
+              : weatherCondition == "Haze"
+                  ? Icons.foggy
+
+                  : Icons.cloud,
+
       color: Colors.orange,
       size:40,),
       const SizedBox(height:20),
-     Column(
+  Column(
 
   crossAxisAlignment: CrossAxisAlignment.start,
 
   children: [
 
-    Text(
+    if (weatherProvider.isLoading)
 
-      weatherData == null
-          ? "Loading..."
-          : "${weatherData["main"]["temp"]}°C",
+    
 
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
+        CircularProgressIndicator(
+           color:Colors.orange,)
+
+        
+
+    else if (errorMessage != null)
+
+      Text(
+
+        errorMessage,
+
+        style: const TextStyle(
+          color: Colors.red,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      )
+
+    else ...[
+
+      Text(
+
+        "${weatherData!["main"]["temp"]}°C",
+
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-    ),
 
-    const SizedBox(height: 6),
+      const SizedBox(height: 6),
 
-    Text(
+      Text(
 
-      weatherData == null
-          ? ""
-          : weatherData["weather"][0]["main"],
+        weatherData["weather"][0]["main"],
 
-      style: const TextStyle(
-        color: Colors.white70,
-        fontSize: 16,
+        style: const TextStyle(
+          color: Colors.white70,
+          fontSize: 16,
+        ),
       ),
-    ),
 
-    const SizedBox(height: 6),
+      const SizedBox(height: 6),
 
-    Text(
+      Text(
 
-      weatherData == null
-          ? ""
-          : weatherData["name"],
+        weatherData["name"],
 
-      style: const TextStyle(
-        color: Colors.white54,
-        fontSize: 14,
+        style: const TextStyle(
+          color: Colors.white54,
+          fontSize: 14,
+        ),
       ),
-    ),
+    ],
   ],
 )
     ],

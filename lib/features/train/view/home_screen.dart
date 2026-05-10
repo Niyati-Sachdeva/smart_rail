@@ -66,11 +66,25 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18),
                   ),
             
-                  child: const TextField(
+                  child:  TextField(
             
                     style: TextStyle(
                       color: Colors.white,
-                    ),
+                    ),//enter press search
+                     onSubmitted: (value) {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (context) =>
+            const TrainStatusScreen(),
+      ),
+    );
+  },
+
             
                     decoration: InputDecoration(
             
