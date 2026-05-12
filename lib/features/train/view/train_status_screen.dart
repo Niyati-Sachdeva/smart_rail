@@ -4,6 +4,7 @@ import 'package:smart_railway_app/services/api_service.dart';
 import 'package:smart_railway_app/providers/weather_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_railway_app/services/train_api_service.dart';
+import 'package:smart_railway_app/providers/train_provider.dart';
 class TrainStatusScreen extends StatefulWidget {
 
   const TrainStatusScreen({super.key});

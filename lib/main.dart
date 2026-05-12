@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/weather_provider.dart';
 import 'features/train/view/splash_screen.dart';
+import 'providers/train_provider.dart';
 
 void main() {
   runApp(
+    MultiProvider(
+      providers:[ 
     ChangeNotifierProvider(
       create:(context) => WeatherProvider(),
-      child: const MyApp()),
-  );
+      
+  ),
+  ChangeNotifierProvider(
+    create: (context)=>TrainProvider(),),
+      ],
+      child: const MyApp(),),);
 }
 
 class MyApp extends StatelessWidget {
