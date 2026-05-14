@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'route_timeline_screen.dart';
+import 'widgets/station_info_card.dart';
+import 'widgets/route_button.dart';
 
 import 'package:smart_railway_app/providers/weather_provider.dart';
 import 'package:smart_railway_app/providers/train_provider.dart';
@@ -305,7 +305,7 @@ class _TrainStatusScreenState
                       const SizedBox(
                           height: 50),
 
-                      stationInfoCard(
+                      StationInfoCard(
                         title:
                             "Current Station",
                         value:
@@ -315,7 +315,7 @@ class _TrainStatusScreenState
                       const SizedBox(
                           height: 20),
 
-                      stationInfoCard(
+                      StationInfoCard(
                         title: "Next Station",
                         value:
                             "Prayagraj Junction",
@@ -324,7 +324,7 @@ class _TrainStatusScreenState
                       const SizedBox(
                           height: 20),
 
-                      stationInfoCard(
+                      StationInfoCard(
                         title:
                             "Estimated Arrival",
                         value: "7:40 PM",
@@ -487,64 +487,8 @@ class _TrainStatusScreenState
 
                       const SizedBox(
                           height: 30),
-
-                      SizedBox(
-
-                        width:
-                            double.infinity,
-
-                        height: 58,
-
-                        child:
-                            ElevatedButton(
-
-                          style:
-                              ElevatedButton
-                                  .styleFrom(
-
-                            backgroundColor:
-                                Colors.orange,
-
-                            shape:
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius
-                                      .circular(
-                                          18),
-                            ),
-                          ),
-
-                          onPressed: () {
-
-                            Navigator.push(
-
-                              context,
-
-                              MaterialPageRoute(
-
-                                builder:
-                                    (context) =>
-                                        const RouteTimelineScreen(),
-                              ),
-                            );
-                          },
-
-                          child: const Text(
-
-                            "View Full Route",
-
-                            style:
-                                TextStyle(
-                              color:
-                                  Colors.black,
-                              fontSize: 18,
-                              fontWeight:
-                                  FontWeight
-                                      .bold,
-                            ),
-                          ),
-                        ),
-                      ),
+const RouteButton(),
+                      
                     ],
                   ),
                 ),
@@ -553,61 +497,4 @@ class _TrainStatusScreenState
     );
   }
 
-  Widget stationInfoCard({
-
-    required String title,
-
-    required String value,
-  }) {
-
-    return Container(
-
-      width: double.infinity,
-
-      padding:
-          const EdgeInsets.all(20),
-
-      decoration: BoxDecoration(
-
-        color:
-            const Color(0xFF1A2238),
-
-        borderRadius:
-            BorderRadius.circular(20),
-      ),
-
-      child: Column(
-
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-
-        children: [
-
-          Text(
-
-            title,
-
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
-          ),
-
-          const SizedBox(height: 10),
-
-          Text(
-
-            value,
-
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight:
-                  FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
