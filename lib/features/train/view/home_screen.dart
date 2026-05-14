@@ -80,7 +80,7 @@ class HomeScreen extends StatelessWidget {
       MaterialPageRoute(
 
         builder: (context) =>
-            const TrainStatusScreen(),
+            TrainStatusScreen(trainNumber:value),
       ),
     );
   },
@@ -131,7 +131,7 @@ class HomeScreen extends StatelessWidget {
 
     MaterialPageRoute(
 
-      builder: (context) => const TrainStatusScreen(),
+      builder: (context) =>  TrainStatusScreen(trainNumber: '12951',),
     ),
   );
 },
