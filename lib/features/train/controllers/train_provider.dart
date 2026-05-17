@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_railway_app/services/train_api_service.dart';
+import 'package:smart_railway_app/features/train/service/train_api_service.dart';
 class TrainProvider extends ChangeNotifier{
   Map<String,dynamic>?trainData;
   bool isLoading=false;
@@ -20,7 +20,7 @@ class TrainProvider extends ChangeNotifier{
           await trainApiService
               .fetchTrainStatus(
                   trainNumber);
-
+print(trainData);
     } catch (e) {
 
       errorMessage =

@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'train_status_screen.dart';
+import 'widgets/quick_access_card.dart';
+import 'widgets/recent_train_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScreen> createState() =>
+      _HomeScreenState();
+}
 
+class _HomeScreenState
+    extends State<HomeScreen> {
+
+  final TextEditingController
+      trainController =
+          TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
 
       // Background Color
@@ -67,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                   ),
             
                   child:  TextField(
-            
+            controller: trainController,
                     style: TextStyle(
                       color: Colors.white,
                     ),//enter press search
@@ -124,16 +138,21 @@ class HomeScreen extends StatelessWidget {
                     ),
             
                     onPressed: () {
+Navigator.push(
 
-  Navigator.push(
+  context,
 
-    context,
+  MaterialPageRoute(
 
-    MaterialPageRoute(
+    builder: (context) =>
 
-      builder: (context) =>  TrainStatusScreen(trainNumber: '12951',),
+        TrainStatusScreen(
+
+      trainNumber:
+          trainController.text,
     ),
-  );
+  ),
+);
 },
                     child: const Text(
                       "Track Live",
@@ -169,17 +188,17 @@ class HomeScreen extends StatelessWidget {
             
                   children: [
             
-                    quickAccessCard(
+                    const QuickAccessCard(
                       icon: Icons.location_on,
                       title: "Live",
                     ),
             
-                    quickAccessCard(
+                    const QuickAccessCard(
                       icon: Icons.confirmation_number,
                       title: "PNR",
                     ),
             
-                    quickAccessCard(
+                    const QuickAccessCard(
                       icon: Icons.event_seat,
                       title: "Seats",
                     ),
@@ -202,11 +221,14 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 20),
             
                 // Recent Train Cards
-                recentTrainCard("Rajdhani Express"),
+                const RecentTrainCard(
+                trainName: "Rajdhani Express"),
             
-                recentTrainCard("Vande Bharat"),
+              const RecentTrainCard(
+                trainName: "Vande Bharat"),
             
-                recentTrainCard("Shatabdi Express"),
+              const RecentTrainCard(
+                trainName: "Shatabdi Express"),
               ],
             ),
           ),
@@ -215,88 +237,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Quick Access Card Widget
-  Widget quickAccessCard({
-    required IconData icon,
-    required String title,
-  }) {
-
-    return Container(
-
-      width: 100,
-      height: 100,
-
-      decoration: BoxDecoration(
-
-        color: const Color(0xFF1A2238),
-
-        borderRadius: BorderRadius.circular(20),
-      ),
-
-      child: Column(
-
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-
-          Icon(
-            icon,
-            color: Colors.orange,
-            size: 32,
-          ),
-
-          const SizedBox(height: 10),
-
-          Text(
-            title,
-
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Recent Search Card Widget
-  Widget recentTrainCard(String trainName) {
-
-    return Container(
-
-      margin: const EdgeInsets.only(bottom: 15),
-
-      padding: const EdgeInsets.all(18),
-
-      decoration: BoxDecoration(
-
-        color: const Color(0xFF1A2238),
-
-        borderRadius: BorderRadius.circular(18),
-      ),
-
-      child: Row(
-
-        children: [
-
-          const Icon(
-            Icons.train,
-            color: Colors.orange,
-          ),
-
-          const SizedBox(width: 15),
-
-          Text(
-            trainName,
-
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_railway_app/services/api_service.dart';
+import 'package:smart_railway_app/features/weather/services/api_service.dart';
 
 class WeatherProvider extends ChangeNotifier {
 

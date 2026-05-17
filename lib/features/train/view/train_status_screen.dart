@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'widgets/station_info_card.dart';
 import 'widgets/route_button.dart';
-
-import 'package:smart_railway_app/providers/weather_provider.dart';
-import 'package:smart_railway_app/providers/train_provider.dart';
-
+import 'widgets/train_header.dart';
+import 'widgets/train_status_chip.dart';
+import 'package:smart_railway_app/features/weather/controller/weather_provider.dart';
+import 'package:smart_railway_app/features/train/controllers/train_provider.dart';
+import 'widgets/weather_card.dart';
+import 'package:smart_railway_app/core/utils/train_status_helper.dart';
+import 'package:smart_railway_app/core/utils/station_name_cleaner.dart';
 class TrainStatusScreen extends StatefulWidget {
 
   final String trainNumber;
@@ -28,17 +31,36 @@ class _TrainStatusScreenState
 
     super.initState();
 
-    Future.microtask(() {
+    Future.microtask(() async {
 
-      Provider.of<WeatherProvider>(
-        context,
-        listen: false,
-      ).getWeather("Saharanpur");
-
+  final trainProvider =
       Provider.of<TrainProvider>(
-        context,
-        listen: false,
-      ).getTrainStatus(widget.trainNumber);
+    context,
+    listen: false,
+  );
+
+  await trainProvider.getTrainStatus(
+      widget.trainNumber);
+
+  final rawStationName =
+
+      trainProvider.trainData?[
+              "body"]?[
+          "stations"]?[0]?[
+          "stationName"] ??
+
+      "Delhi";
+
+  final cleanedCityName =
+      cleanCityName(
+          rawStationName);
+
+  Provider.of<WeatherProvider>(
+    context,
+    listen: false,
+  ).getWeather(
+      cleanedCityName);
+
     });
   }
 
@@ -50,6 +72,24 @@ class _TrainStatusScreenState
 
     final trainProvider =
         Provider.of<TrainProvider>(context);
+        final stations =
+
+    trainProvider.trainData?[
+            "body"]?[
+        "stations"] ??
+    [];
+
+final currentStationCode =
+
+    trainProvider.trainData?[
+            "body"]?[
+        "current_station"] ??
+    "";
+
+final currentIndex =
+    getCurrentStationIndex(
+        stations,
+        currentStationCode);
 
     final weatherData =
         weatherProvider.weatherData;
@@ -58,7 +98,7 @@ class _TrainStatusScreenState
         weatherProvider.errorMessage;
 
     final weatherCondition =
-        weatherData?["weather"][0]["main"];
+        weatherData?["weather"]?[0]?["main"];
 
     return Scaffold(
 
@@ -90,127 +130,37 @@ class _TrainStatusScreenState
                         CrossAxisAlignment.start,
 
                     children: [
+TrainHeader(
 
-                      // Back Button
-                      Row(
+  trainName:
+"Train Number ${widget.trainNumber}",
+     
+                      trainNumber:
+                      widget.trainNumber,),                    
+//statuschip widget 
+TrainStatusChip(
 
-                        children: [
+  status:
 
-                          IconButton(
+      trainProvider.trainData?[
+              "body"]?[
+          "current_station"] ??
 
-                            onPressed: () {
-                              Navigator.pop(
-                                  context);
-                            },
+      "Status not available",
 
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+  delayMessage:
 
-                      const SizedBox(
-                          height: 20),
+      trainProvider.trainData?[
+              "body"]?[
+          "train_status_message"] ?.replaceAll(
+            RegExp(r'<[^>]*>'),
+            '') ??
 
-                      // Train Name
-                      Text(
+          
 
-                        trainProvider.trainData?[
-                                "train_name"] ??
-                            "Loading...",
-
-                        style:
-                            const TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight:
-                              FontWeight.bold,
-                        ),
-                      ),
-
-                      const SizedBox(
-                          height: 8),
-
-                      // Train Number
-                      Text(
-
-                        widget.trainNumber,
-
-                        style:
-                            const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 18,
-                        ),
-                      ),
-
-                      const SizedBox(
-                          height: 25),
-
-                      // Status Chip
-                      Container(
-
-                        padding:
-                            const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 12,
-                        ),
-
-                        decoration:
-                            BoxDecoration(
-
-                          color: Colors.orange,
-
-                          borderRadius:
-                              BorderRadius.circular(
-                                  30),
-                        ),
-
-                        child: Column(
-
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
-
-                          children: [
-
-                            Text(
-
-                              trainProvider
-                                          .trainData?[
-                                      "status_as_of"] ??
-                                  "Status not available",
-
-                              style:
-                                  const TextStyle(
-                                color: Colors.black,
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
-                              ),
-                            ),
-
-                            const SizedBox(
-                                height: 8),
-
-                            Text(
-
-                              trainProvider
-                                          .trainData?[
-                                      "delay_message"] ??
-                                  "On Time",
-
-                              style:
-                                  const TextStyle(
-                                color:
-                                    Colors.redAccent,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+      "On Time",
+),
+                   
 
                       const SizedBox(
                           height: 40),
@@ -224,9 +174,9 @@ class _TrainStatusScreenState
 
                         children: [
 
-                          const Text(
+                          Text(
 
-                            "Delhi",
+                            trainProvider.trainData?["body"]?["stations"]?[0]?["stationname"]??"Start",
 
                             style: TextStyle(
                               color:
@@ -289,9 +239,9 @@ class _TrainStatusScreenState
                             ),
                           ),
 
-                          const Text(
+                          Text(
 
-                            "Kanpur",
+                            trainProvider.trainData?["body"]?["stations"]?.last?["stationName"]??"End",
 
                             style: TextStyle(
                               color:
@@ -309,7 +259,7 @@ class _TrainStatusScreenState
                         title:
                             "Current Station",
                         value:
-                            "Kanpur Central",
+                            trainProvider.trainData?["body"]?["current_station"]??"Unknown",
                       ),
 
                       const SizedBox(
@@ -317,8 +267,17 @@ class _TrainStatusScreenState
 
                       StationInfoCard(
                         title: "Next Station",
-                        value:
-                            "Prayagraj Junction",
+                      value:
+
+    currentIndex + 1 <
+            stations.length
+
+        ? stations[
+                currentIndex + 1]
+            ["stationName"]
+
+        : "No Next Station",
+                            
                       ),
 
                       const SizedBox(
@@ -327,163 +286,36 @@ class _TrainStatusScreenState
                       StationInfoCard(
                         title:
                             "Estimated Arrival",
-                        value: "7:40 PM",
+                        value:
+
+    currentIndex + 1 <
+            stations.length
+
+        ? stations[
+                currentIndex + 1]
+            ["arrivalTime"]
+
+        : "--",
                       ),
 
                       const SizedBox(
                           height: 20),
 
                       // Weather Card
-                      Container(
+WeatherCard(
 
-                        width:
-                            double.infinity,
+  isLoading:
+      weatherProvider.isLoading,
 
-                        padding:
-                            const EdgeInsets.all(
-                                20),
+  errorMessage:
+      errorMessage,
 
-                        decoration:
-                            BoxDecoration(
+  weatherData:
+      weatherData,
 
-                          color: const Color(
-                              0xFF1A2238),
-
-                          borderRadius:
-                              BorderRadius.circular(
-                                  20),
-                        ),
-
-                        child: Row(
-
-                          children: [
-
-                            Icon(
-
-                              weatherCondition ==
-                                      "Rain"
-                                  ? Icons
-                                      .water_drop
-                                  : weatherCondition ==
-                                          "Clouds"
-                                      ? Icons
-                                          .cloud
-                                      : weatherCondition ==
-                                              "Clear"
-                                          ? Icons
-                                              .wb_sunny
-                                          : weatherCondition ==
-                                                  "Haze"
-                                              ? Icons
-                                                  .foggy
-                                              : Icons
-                                                  .cloud,
-
-                              color:
-                                  Colors.orange,
-                              size: 40,
-                            ),
-
-                            const SizedBox(
-                                width: 20),
-
-                            Column(
-
-                              crossAxisAlignment:
-                                  CrossAxisAlignment
-                                      .start,
-
-                              children: [
-
-                                if (weatherProvider
-                                    .isLoading)
-
-                                  const CircularProgressIndicator(
-                                    color: Colors
-                                        .orange,
-                                  )
-
-                                else if (errorMessage !=
-                                    null)
-
-                                  Text(
-
-                                    errorMessage,
-
-                                    style:
-                                        const TextStyle(
-                                      color:
-                                          Colors
-                                              .red,
-                                      fontSize:
-                                          18,
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
-                                    ),
-                                  )
-
-                                else ...[
-
-                                  Text(
-
-                                    "${weatherData!["main"]["temp"]}°C",
-
-                                    style:
-                                        const TextStyle(
-                                      color: Colors
-                                          .white,
-                                      fontSize:
-                                          22,
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
-                                    ),
-                                  ),
-
-                                  const SizedBox(
-                                      height:
-                                          6),
-
-                                  Text(
-
-                                    weatherData[
-                                            "weather"]
-                                        [0]
-                                        ["main"],
-
-                                    style:
-                                        const TextStyle(
-                                      color: Colors
-                                          .white70,
-                                      fontSize:
-                                          16,
-                                    ),
-                                  ),
-
-                                  const SizedBox(
-                                      height:
-                                          6),
-
-                                  Text(
-
-                                    weatherData[
-                                        "name"],
-
-                                    style:
-                                        const TextStyle(
-                                      color: Colors
-                                          .white54,
-                                      fontSize:
-                                          14,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+  weatherCondition:
+      weatherCondition,
+),
 
                       const SizedBox(
                           height: 30),

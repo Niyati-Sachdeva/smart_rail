@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/weather_provider.dart';
+import 'features/weather/controller/weather_provider.dart';
 import 'features/train/view/splash_screen.dart';
-import 'providers/train_provider.dart';
+import 'features/train/controllers/train_provider.dart';
 
 void main() {
   runApp(
