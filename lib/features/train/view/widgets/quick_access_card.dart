@@ -7,6 +7,8 @@ class QuickAccessCard
 
   final String title;
 
+  final VoidCallback onTap;
+
   const QuickAccessCard({
 
     super.key,
@@ -14,53 +16,60 @@ class QuickAccessCard
     required this.icon,
 
     required this.title,
+
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
 
-    return Container(
+    return GestureDetector(
 
-      width: 100,
-      height: 100,
+      onTap: onTap,
 
-      decoration: BoxDecoration(
+      child: Container(
 
-        color:
-            const Color(0xFF1A2238),
+        width: 100,
+        height: 100,
 
-        borderRadius:
-            BorderRadius.circular(20),
-      ),
+        decoration: BoxDecoration(
 
-      child: Column(
+          color:
+              const Color(0xFF1A2238),
 
-        mainAxisAlignment:
-            MainAxisAlignment.center,
+          borderRadius:
+              BorderRadius.circular(20),
+        ),
 
-        children: [
+        child: Column(
 
-          Icon(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
 
-            icon,
+          children: [
 
-            color: Colors.orange,
+            Icon(
 
-            size: 32,
-          ),
+              icon,
 
-          const SizedBox(height: 10),
+              color: Colors.orange,
 
-          Text(
-
-            title,
-
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
+              size: 32,
             ),
-          ),
-        ],
+
+            const SizedBox(height: 10),
+
+            Text(
+
+              title,
+
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

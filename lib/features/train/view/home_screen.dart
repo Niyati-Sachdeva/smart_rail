@@ -188,23 +188,70 @@ Navigator.push(
             
                   children: [
             
-                    const QuickAccessCard(
-                      icon: Icons.location_on,
-                      title: "Live",
-                    ),
+                  QuickAccessCard(
+
+  icon: Icons.location_on,
+
+  title: "Live",
+
+  onTap: () {
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
+      const SnackBar(
+
+        content: Text(
+          "You are already on Live Tracking",
+        ),
+      ),
+    );
+  },
+),
             
-                    const QuickAccessCard(
-                      icon: Icons.confirmation_number,
-                      title: "PNR",
-                    ),
+               QuickAccessCard(
+
+  icon:
+      Icons.confirmation_number,
+
+  title: "PNR",
+
+  onTap: () {
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
+      const SnackBar(
+
+        content: Text(
+          "PNR feature coming soon",
+        ),
+      ),
+    );
+  },
+),
             
-                    const QuickAccessCard(
-                      icon: Icons.event_seat,
-                      title: "Seats",
-                    ),
-                  ],
-                ),
-            
+                QuickAccessCard(
+
+  icon: Icons.event_seat,
+
+  title: "Seats",
+
+  onTap: () {
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
+      const SnackBar(
+
+        content: Text(
+          "Seat availability coming soon",
+        ),
+      ),
+    );
+  },
+),
+                  ],),
                 const SizedBox(height: 40),
             
                 // Recent Searches Heading
@@ -220,18 +267,75 @@ Navigator.push(
             
                 const SizedBox(height: 20),
             
-                // Recent Train Cards
-                const RecentTrainCard(
-                trainName: "Rajdhani Express"),
-            
-              const RecentTrainCard(
-                trainName: "Vande Bharat"),
-            
-              const RecentTrainCard(
-                trainName: "Shatabdi Express"),
+                // Recent Train Card
+              RecentTrainCard(
+
+  trainName: "12951",
+
+  onTap: () {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (context) =>
+
+            const TrainStatusScreen(
+          trainNumber: "12951",
+        ),
+      ),
+    );
+  },
+),
+
+RecentTrainCard(
+
+  trainName: "12002",
+
+  onTap: () {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (context) =>
+
+            const TrainStatusScreen(
+          trainNumber: "12002",
+        ),
+      ),
+    );
+  },
+),
+
+RecentTrainCard(
+
+  trainName: "12301",
+
+  onTap: () {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (context) =>
+
+            const TrainStatusScreen(
+          trainNumber: "12301",
+        ),
+      ),
+    );
+  },
+),
               ],
             ),
-          ),
+            )
         ),
       ),
     );
