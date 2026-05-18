@@ -1,68 +1,60 @@
 import 'package:flutter/material.dart';
-import '../route_timeline_screen.dart';
 
-class RouteButton extends StatelessWidget {
+class RouteButton
+    extends StatelessWidget {
 
-const RouteButton({super.key,});
-@override
+  final VoidCallback onTap;
+
+  const RouteButton({
+
+    super.key,
+
+    required this.onTap,
+  });
+
+  @override
   Widget build(BuildContext context) {
-  
-  
 
-return SizedBox(
+    return SizedBox(
 
-                        width:
-                            double.infinity,
+      width: double.infinity,
 
-                        height: 58,
+      height: 55,
 
-                        child:
-                            ElevatedButton(
+      child: ElevatedButton(
 
-                          style:
-                              ElevatedButton
-                                  .styleFrom(
+        onPressed: onTap,
 
-                            backgroundColor:
-                                Colors.orange,
+        style:
+            ElevatedButton.styleFrom(
 
-                            shape:
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius
-                                      .circular(
-                                          18),
-                            ),
-                          ),
+          backgroundColor:
+              Colors.orange,
 
-                          onPressed: () {
+          shape:
+              RoundedRectangleBorder(
 
-                            Navigator.push(
+            borderRadius:
+                BorderRadius.circular(
+                    18),
+          ),
+        ),
 
-                              context,
+        child: const Text(
 
-                              MaterialPageRoute(
+          "View Full Route",
 
-                                builder:
-                                    (context) =>
-                                        const RouteTimelineScreen(),
-                              ),
-                            );
-                          },
+          style: TextStyle(
 
-                          child: const Text(
+            color: Colors.black,
 
-                            "View Full Route",
+            fontSize: 18,
 
-                            style:
-                                TextStyle(
-                              color:
-                                  Colors.black,
-                              fontSize: 18,
-                              fontWeight:
-                                  FontWeight
-                                      .bold,
-                            ),
-                          ),
-                        ),
-                      );}}
+            fontWeight:
+                FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}

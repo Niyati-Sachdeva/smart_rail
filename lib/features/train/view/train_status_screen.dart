@@ -9,6 +9,7 @@ import 'package:smart_railway_app/features/train/controllers/train_provider.dart
 import 'widgets/weather_card.dart';
 import 'package:smart_railway_app/core/utils/train_status_helper.dart';
 import 'package:smart_railway_app/core/utils/station_name_cleaner.dart';
+import 'route_timeline_screen.dart';
 class TrainStatusScreen extends StatefulWidget {
 
   final String trainNumber;
@@ -318,8 +319,39 @@ WeatherCard(
 ),
 
                       const SizedBox(
-                          height: 30),
-const RouteButton(),
+                          height:20),
+                          RouteButton(
+
+  onTap: () {
+
+    Navigator.push(
+
+      context,
+
+      MaterialPageRoute(
+
+        builder: (context) =>
+
+            RouteTimelineScreen(
+
+          stations:
+
+              trainProvider.trainData?[
+                      "body"]?[
+                  "stations"] ??
+              [],
+
+          currentStationCode:
+
+              trainProvider.trainData?[
+                      "body"]?[
+                  "current_station"] ??
+              "",
+        ),
+      ),
+    );
+  },
+),
                       
                     ],
                   ),

@@ -1,143 +1,87 @@
 import 'package:flutter/material.dart';
 
-class RouteTimelineScreen extends StatelessWidget {
+import 'widgets/timeline_station_tile.dart';
 
-  const RouteTimelineScreen({super.key});
+class RouteTimelineScreen
+    extends StatelessWidget {
+
+  final List stations;
+
+  final String currentStationCode;
+
+  const RouteTimelineScreen({
+
+    super.key,
+
+    required this.stations,
+
+    required this.currentStationCode,
+  });
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
 
-      backgroundColor: const Color(0xFF0B1020),
+      backgroundColor:
+          const Color(0xFF0B1020),
 
-      body: SafeArea(
+      appBar: AppBar(
 
-        child: Padding(
+  backgroundColor:
+      const Color(0xFF0B1020),
 
-          padding: const EdgeInsets.all(20),
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+  ),
 
-          child: Column(
+  title: const Text(
 
-            crossAxisAlignment: CrossAxisAlignment.start,
+    "Train Route Timeline",
 
-            children: [
-
-              // Back Button
-              Row(
-
-                children: [
-
-                  IconButton(
-
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  const SizedBox(width: 10),
-
-                  const Text(
-                    "Train Route",
-
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height:40),
-              timelineTile( stationName: "Delhi",
-
-  status: "Reached",
-
-  icon: Icons.radio_button_checked,
-
-  iconColor: Colors.orange),
-  timelineTile(
-
-  stationName: "Ghaziabad",
-
-  status: "Reached",
-
-  icon: Icons.radio_button_checked,
-
-  iconColor: Colors.orange,
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
 ),
-timelineTile(
+      body: ListView.builder(
 
-  stationName: "Kanpur Central",
+        padding:
+            const EdgeInsets.all(20),
 
-  status: "Current Station",
+        itemCount: stations.length,
 
-  icon: Icons.train,
+        itemBuilder:
+            (context, index) {
 
-  iconColor: Colors.orange,
-),
-timelineTile(
+          final station =
+              stations[index];
 
-  stationName: "Prayagraj",
+          return TimelineStationTile(
 
-  status: "Upcoming",
+            stationName:
 
-  icon: Icons.radio_button_unchecked,
+                station["stationName"] ??
+                    "Unknown",
 
-  iconColor: Colors.white54,
-),
-            ],
-          ),
-        ),
+            arrivalTime:
+
+                station["arrivalTime"] ??
+                    "--",
+
+            departureTime:
+
+                station["departureTime"] ??
+                    "--",
+
+            isCurrentStation:
+
+                station["stationCode"] ==
+                    currentStationCode,
+          );
+        },
       ),
-    );}
-    Widget timelineTile({
-      required String stationName,
-      required String status,
-      required IconData icon,
-      required Color iconColor, 
-    }){
-      return Container(
-        margin: EdgeInsets.only(bottom:25),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            children: [
-            Icon(icon,
-            color:iconColor,
-            size:28,
-          ),
-          Container(
-            width:2,
-            height: 50,
-            color:Colors.white24,
-
-          ),
-        ],),
-        const SizedBox(width:20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(stationName,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),),
-            const SizedBox(height:5),
-            Text(
-              status,
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 14,
-              ),
-            ),
-          ],),],),
-      );
-    }}
-  
+    );
+  }
+}
